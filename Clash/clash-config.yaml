@@ -1,0 +1,912 @@
+========= 基础设置 ========#
+port: 7890
+socks-port: 7891
+redir-port: 7892
+mixed-port: 7893
+allow-lan: true
+bind-address: "*"
+mode: rule
+log-level: info
+ipv6: false
+external-controller: 127.0.0.1:9090
+secret: "you password"   # API密码，请修改为你的自定义密码
+unified-delay: true
+tcp-concurrent: true
+disable-icmp-forwarding: true
+udp: true
+global-client-fingerprint: chrome
+profile:
+  store-selected: true
+  store-fake-ip: true
+  tracing: false
+sniffer:
+  enable: true
+  force-dns-mapping: true
+  parse-pure-ip: true
+  override-destination: true
+  sniff:
+    HTTP:
+      ports: [80, 8080-8880]
+      override-destination: true
+    TLS:
+      ports: [443, 8443]
+    QUIC:
+      ports: [443, 8443]
+  force-domain:
+    - +.v2ex.com
+  skip-domain:
+    - Mijia Cloud
+    
+
+#========= DNS ========#
+dns:
+  enable: true
+  ipv6: false
+  listen: 0.0.0.0:1053
+  enhanced-mode: fake-ip
+  fake-ip-range: 198.18.0.1/16
+  fake-ip-filter:
+    - "*.lan"
+    - "*.local"
+    - "*.arpa"
+    - "+.msftconnecttest.com"
+    - "+.msftncsi.com"
+    - "msftconnecttest.com"
+    - "xbox.*.microsoft.com"
+    - "*.xboxlive.com"
+    - "+.market.xiaomi.com"
+    - "+.srv.nintendo.net"
+    - "+.stun.playstation.net"
+    - "*.battlenet.com.cn"
+    - "*.battlenet.com"
+    - "*.blzstatic.cn"
+    - "*.battle.net"
+    - "time.*.com"
+    - "ntp.*.com"
+    - "localhost.ptlogin2.qq.com"
+    
+  default-nameserver:
+    - 180.184.1.1
+    - 119.29.29.29
+    - 223.5.5.5
+    
+  nameserver-policy:
+    "geosite:cn": [119.29.29.29, 223.5.5.5, system]
+    "geosite:apple": [119.29.29.29, 223.5.5.5, system]
+    "geosite:private": [119.29.29.29, 223.5.5.5, system]
+    "geosite:category-games@cn": [119.29.29.29, 223.5.5.5, system]
+    
+  nameserver:
+    - https://223.6.6.6/dns-query
+    - https://doh.pub/dns-query
+    
+  fallback:
+    - https://cloudflare-dns.com/dns-query
+    - https://dns.google/dns-query
+    - https://dns.alidns.com/dns-query
+    
+  proxy-server-nameserver:
+    - https://223.5.5.5/dns-query
+    - https://doh.pub/dns-query
+
+  fallback-filter:
+    geoip: true
+    geoip-code: CN
+    ipcidr:
+      - 240.0.0.0/4
+
+
+#========= 锚点定义 ========#
+# 节点提供者
+provider: &provider
+  type: http
+  interval: 86400
+  proxy: DIRECT
+  health-check:
+    enable: true
+    url: http://www.gstatic.com/generate_204
+    interval: 1800
+
+# 规则集类型
+domain: &domain
+  type: http
+  behavior: domain
+  interval: 86400
+
+classical: &classical
+  type: http
+  behavior: classical
+  interval: 86400
+
+ipcidr: &ipcidr
+  type: http
+  behavior: ipcidr
+  interval: 86400
+
+# 订阅链接引用锚点
+use: &use [Sub]
+
+# 节点地区分组状态（true=隐藏，false=显示）
+hide: &hide true
+
+
+#========= 订阅链接 ========#
+proxy-providers:
+  Sub:
+    <<: *provider
+    url: "https://google.com"
+    # 此处填入你的订阅链接
+    path: ./proxy_providers/Sub.yaml
+    override:
+      additional-prefix: "[Sub] "
+
+    
+#========= 策略组 ========#
+proxy-groups:
+  # 代理分组
+  - name: PROXY
+    type: select
+    use: *use
+    
+  - name: 全球畅连
+    type: select
+    proxies: [♻️自动选择, 🇭🇰香港, 🇨🇳台湾, 🇸🇬新加坡, 🇯🇵日本, 🇺🇸美国]
+  
+  - name: 国际社交
+    type: select
+    proxies: [♻️自动选择, 🇭🇰香港, 🇨🇳台湾, 🇸🇬新加坡, 🇯🇵日本, 🇺🇸美国]
+    
+  - name: 国际媒体
+    type: select
+    proxies: [♻️自动选择, 🇭🇰香港, 🇨🇳台湾, 🇸🇬新加坡, 🇯🇵日本, 🇺🇸美国]
+  
+  - name: 游戏平台
+    type: select
+    proxies: [DIRECT, 🇭🇰香港, 🇨🇳台湾, 🇸🇬新加坡, 🇯🇵日本, 🇺🇸美国]
+  
+  - name: Apple
+    type: select
+    proxies: [DIRECT, 🇭🇰香港, 🇨🇳台湾, 🇸🇬新加坡, 🇯🇵日本, 🇺🇸美国]
+    
+  - name: Microsoft
+    type: select
+    proxies: [DIRECT, 🇭🇰香港, 🇨🇳台湾, 🇸🇬新加坡, 🇯🇵日本, 🇺🇸美国]
+    
+  - name: PayPal
+    type: select
+    proxies: [DIRECT, 🇭🇰香港, 🇨🇳台湾, 🇸🇬新加坡, 🇯🇵日本, 🇺🇸美国]
+    
+  - name: 哔哩哔哩
+    type: select
+    proxies: [DIRECT, 🇭🇰香港, 🇨🇳台湾, 🇸🇬新加坡, 🇯🇵日本, 🇺🇸美国]
+    
+     
+  # --------- 地区分组 --------- #
+  - name: ♻️自动选择
+    type: url-test
+    use: *use
+    url: http://www.gstatic.com/generate_204
+    interval: 900
+    tolerance: 50
+    lazy: true
+    hidden: *hide
+
+  #  亚洲 
+  - name: 🇭🇰香港
+    type: url-test
+    use: *use
+    url: http://www.gstatic.com/generate_204
+    interval: 900
+    tolerance: 50
+    lazy: true
+    filter: "香港|港|HK|(?i)Hong Kong|Hong"
+    hidden: *hide
+
+  - name: 🇲🇴澳门
+    type: url-test
+    use: *use
+    url: http://www.gstatic.com/generate_204
+    interval: 900
+    tolerance: 50
+    lazy: true
+    filter: "澳门|MO|(?i)Macao|Macau"
+    hidden: *hide
+
+  - name: 🇨🇳台湾
+    type: url-test
+    use: *use
+    url: http://www.gstatic.com/generate_204
+    interval: 900
+    tolerance: 50
+    lazy: true
+    filter: "台湾|台|灣|TW|(?i)Taiwan|Taipei"
+    hidden: *hide
+
+  - name: 🇯🇵日本
+    type: url-test
+    use: *use
+    url: http://www.gstatic.com/generate_204
+    interval: 900
+    tolerance: 50
+    lazy: true
+    filter: "日本|JP|(?i)Japan|Tokyo|Osaka"
+    hidden: *hide
+
+  - name: 🇰🇷韩国
+    type: url-test
+    use: *use
+    url: http://www.gstatic.com/generate_204
+    interval: 900
+    tolerance: 50
+    lazy: true
+    filter: "(?i)^(?!.*(朝鲜|North Korea|PRK)).*(韩国|韩|\\bKR\\b|(?i)South Korea|Korea|Seoul)"
+    hidden: *hide
+
+  - name: 🇸🇬新加坡
+    type: url-test
+    use: *use
+    url: http://www.gstatic.com/generate_204
+    interval: 900
+    tolerance: 50
+    lazy: true
+    filter: "新加坡|SG|狮|獅|(?i)Singapore"
+    hidden: *hide
+
+  - name: 🇲🇾马来西亚
+    type: url-test
+    use: *use
+    url: http://www.gstatic.com/generate_204
+    interval: 900
+    tolerance: 50
+    lazy: true
+    filter: "马来西亚|马来|MY|(?i)Malaysia|Kuala Lumpur"
+    hidden: *hide
+
+  - name: 🇮🇩印度尼西亚
+    type: url-test
+    use: *use
+    url: http://www.gstatic.com/generate_204
+    interval: 900
+    tolerance: 50
+    lazy: true
+    filter: "印度尼西亚|印尼|ID|(?i)Indonesia|Jakarta"
+    hidden: *hide
+
+  - name: 🇵🇭菲律宾
+    type: url-test
+    use: *use
+    url: http://www.gstatic.com/generate_204
+    interval: 900
+    tolerance: 50
+    lazy: true
+    filter: "菲律宾|菲|PH|(?i)Philippines|Manila"
+    hidden: *hide
+
+  - name: 🇻🇳越南
+    type: url-test
+    use: *use
+    url: http://www.gstatic.com/generate_204
+    interval: 900
+    tolerance: 50
+    lazy: true
+    filter: "越南|越|VN|(?i)Vietnam|Hanoi|Ho Chi Minh"
+    hidden: *hide
+
+  - name: 🇹🇭泰国
+    type: url-test
+    use: *use
+    url: http://www.gstatic.com/generate_204
+    interval: 900
+    tolerance: 50
+    lazy: true
+    filter: "泰国|TH|(?i)Thailand|Bangkok"
+    hidden: *hide
+
+  - name: 🇮🇳印度
+    type: url-test
+    use: *use
+    url: http://www.gstatic.com/generate_204
+    interval: 900
+    tolerance: 50
+    lazy: true
+    filter: "(?i)^(?!.*(英属印度洋|British Indian Ocean|BIOT)).*(印度|\\bIN\\b|(?i)India|Bangalore|Mumbai|New Delhi)"
+    hidden: *hide
+
+  - name: 🇹🇷土耳其
+    type: url-test
+    use: *use
+    url: http://www.gstatic.com/generate_204
+    interval: 900
+    tolerance: 50
+    lazy: true
+    filter: "土耳其|TR|(?i)Turkey|Türkiye|Turkiye|Istanbul|Ankara"
+    hidden: *hide
+
+  - name: 🇮🇱以色列
+    type: url-test
+    use: *use
+    url: http://www.gstatic.com/generate_204
+    interval: 900
+    tolerance: 50
+    lazy: true
+    filter: "以色列|以|IL|(?i)Israel|Tel Aviv|Haifa"
+    hidden: *hide
+
+  - name: 🇦🇪阿联酋
+    type: url-test
+    use: *use
+    url: http://www.gstatic.com/generate_204
+    interval: 900
+    tolerance: 50
+    lazy: true
+    filter: "阿联酋|UAE|AE|(?i)United Arab Emirates|Dubai|Abu Dhabi"
+    hidden: *hide
+
+  - name: 🇸🇦沙特阿拉伯
+    type: url-test
+    use: *use
+    url: http://www.gstatic.com/generate_204
+    interval: 900
+    tolerance: 50
+    lazy: true
+    filter: "沙特阿拉伯|沙特|SA|(?i)Saudi Arabia|Riyadh"
+    hidden: *hide
+
+  #  欧洲 
+  - name: 🇬🇧英国
+    type: url-test
+    use: *use
+    url: http://www.gstatic.com/generate_204
+    interval: 900
+    tolerance: 50
+    lazy: true
+    filter: "英国|UK|(?i)United Kingdom|London|Manchester"
+    hidden: *hide
+
+  - name: 🇩🇪德国
+    type: url-test
+    use: *use
+    url: http://www.gstatic.com/generate_204
+    interval: 900
+    tolerance: 50
+    lazy: true
+    filter: "德国|DE|(?i)Germany|Berlin"
+    hidden: *hide
+
+  - name: 🇫🇷法国
+    type: url-test
+    use: *use
+    url: http://www.gstatic.com/generate_204
+    interval: 900
+    tolerance: 50
+    lazy: true
+    filter: "法国|FR|(?i)France|Paris"
+    hidden: *hide
+
+  - name: 🇳🇱荷兰
+    type: url-test
+    use: *use
+    url: http://www.gstatic.com/generate_204
+    interval: 900
+    tolerance: 50
+    lazy: true
+    filter: "荷兰|NL|(?i)Netherlands|Amsterdam"
+    hidden: *hide
+
+  - name: 🇮🇹意大利
+    type: url-test
+    use: *use
+    url: http://www.gstatic.com/generate_204
+    interval: 900
+    tolerance: 50
+    lazy: true
+    filter: "意大利|IT|(?i)Italy|Rome"
+    hidden: *hide
+
+  - name: 🇪🇸西班牙
+    type: url-test
+    use: *use
+    url: http://www.gstatic.com/generate_204
+    interval: 900
+    tolerance: 50
+    lazy: true
+    filter: "西班牙|ES|(?i)Spain|Madrid"
+    hidden: *hide
+
+  - name: 🇵🇹葡萄牙
+    type: url-test
+    use: *use
+    url: http://www.gstatic.com/generate_204
+    interval: 900
+    tolerance: 50
+    lazy: true
+    filter: "葡萄牙|葡|PT|(?i)Portugal|Lisbon"
+    hidden: *hide
+
+  - name: 🇨🇭瑞士
+    type: url-test
+    use: *use
+    url: http://www.gstatic.com/generate_204
+    interval: 900
+    tolerance: 50
+    lazy: true
+    filter: "瑞士|CH|(?i)Switzerland|Zurich"
+    hidden: *hide
+    
+  - name: 🇸🇪瑞典
+    type: url-test
+    use: *use
+    url: http://www.gstatic.com/generate_204
+    interval: 900
+    tolerance: 50
+    lazy: true
+    filter: "瑞典|SE|(?i)Sweden|Stockholm"
+    hidden: *hide
+
+  - name: 🇳🇴挪威
+    type: url-test
+    use: *use
+    url: http://www.gstatic.com/generate_204
+    interval: 900
+    tolerance: 50
+    lazy: true
+    filter: "挪威|挪|NO|(?i)Norway|Oslo"
+    hidden: *hide
+
+  - name: 🇩🇰丹麦
+    type: url-test
+    use: *use
+    url: http://www.gstatic.com/generate_204
+    interval: 900
+    tolerance: 50
+    lazy: true
+    filter: "丹麦|DK|(?i)Denmark|Copenhagen"
+    hidden: *hide
+
+  - name: 🇫🇮芬兰
+    type: url-test
+    use: *use
+    url: http://www.gstatic.com/generate_204
+    interval: 900
+    tolerance: 50
+    lazy: true
+    filter: "芬兰|芬|FI|(?i)Finland|Helsinki"
+    hidden: *hide
+
+  - name: 🇵🇱波兰
+    type: url-test
+    use: *use
+    url: http://www.gstatic.com/generate_204
+    interval: 900
+    tolerance: 50
+    lazy: true
+    filter: "波兰|PL|(?i)Poland|Warsaw"
+    hidden: *hide
+
+  - name: 🇨🇿捷克
+    type: url-test
+    use: *use
+    url: http://www.gstatic.com/generate_204
+    interval: 900
+    tolerance: 50
+    lazy: true
+    filter: "捷克|捷|CZ|(?i)Czech Republic|Czech"
+    hidden: *hide
+
+  - name: 🇮🇪爱尔兰
+    type: url-test
+    use: *use
+    url: http://www.gstatic.com/generate_204
+    interval: 900
+    tolerance: 50
+    lazy: true
+    filter: "爱尔兰|IE|(?i)Ireland|Dublin"
+    hidden: *hide
+
+  - name: 🇷🇺俄罗斯
+    type: url-test
+    use: *use
+    url: http://www.gstatic.com/generate_204
+    interval: 900
+    tolerance: 50
+    lazy: true
+    filter: "(?i)^(?!.*(白俄罗斯|白俄|Belarus|BY)).*(俄罗斯|\\bRU\\b|(?i)Russia|Moscow)"
+    hidden: *hide
+
+  - name: 🇺🇦乌克兰
+    type: url-test
+    use: *use
+    url: http://www.gstatic.com/generate_204
+    interval: 900
+    tolerance: 50
+    lazy: true
+    filter: "乌克兰|UA|(?i)Ukraine|Kyiv|Kharkiv"
+    hidden: *hide
+
+  #  北美洲 
+  - name: 🇺🇸美国
+    type: url-test
+    use: *use
+    url: http://www.gstatic.com/generate_204
+    interval: 900
+    tolerance: 50
+    lazy: true
+    filter: "美国|US|(?i)United States|America|New York|Los Angeles"
+    hidden: *hide
+
+  - name: 🇨🇦加拿大
+    type: url-test
+    use: *use
+    url: http://www.gstatic.com/generate_204
+    interval: 900
+    tolerance: 50
+    lazy: true
+    filter: "加拿大|CA|(?i)Canada|Ottawa"
+    hidden: *hide
+
+  - name: 🇲🇽墨西哥
+    type: url-test
+    use: *use
+    url: http://www.gstatic.com/generate_204
+    interval: 900
+    tolerance: 50
+    lazy: true
+    filter: "墨西哥|MX|(?i)Mexico|Mexico City|Guadalajara"
+    hidden: *hide
+
+  #  南美洲 
+  - name: 🇧🇷巴西
+    type: url-test
+    use: *use
+    url: http://www.gstatic.com/generate_204
+    interval: 900
+    tolerance: 50
+    lazy: true
+    filter: "巴西|BR|(?i)Brazil|Brasília"
+    hidden: *hide
+
+  - name: 🇦🇷阿根廷
+    type: url-test
+    use: *use
+    url: http://www.gstatic.com/generate_204
+    interval: 900
+    tolerance: 50
+    lazy: true
+    filter: "阿根廷|根廷|AR|(?i)Argentina|Buenos Aires"
+    hidden: *hide
+
+  - name: 🇨🇱智利
+    type: url-test
+    use: *use
+    url: http://www.gstatic.com/generate_204
+    interval: 900
+    tolerance: 50
+    lazy: true
+    filter: "智利|智|CL|(?i)Chile|Santiago"
+    hidden: *hide
+
+  - name: 🇨🇴哥伦比亚
+    type: url-test
+    use: *use
+    url: http://www.gstatic.com/generate_204
+    interval: 900
+    tolerance: 50
+    lazy: true
+    filter: "哥伦比亚|CO|(?i)Colombia|Bogotá"
+    hidden: *hide
+
+  - name: 🇵🇪秘鲁
+    type: url-test
+    use: *use
+    url: http://www.gstatic.com/generate_204
+    interval: 900
+    tolerance: 50
+    lazy: true
+    filter: "秘鲁|秘|PE|(?i)Peru|Lima"
+    hidden: *hide
+
+  #  非洲 
+  - name: 🇿🇦南非
+    type: url-test
+    use: *use
+    url: http://www.gstatic.com/generate_204
+    interval: 900
+    tolerance: 50
+    lazy: true
+    filter: "南非|ZA|(?i)South Africa|Pretoria|Johannesburg"
+    hidden: *hide
+
+  - name: 🇪🇬埃及
+    type: url-test
+    use: *use
+    url: http://www.gstatic.com/generate_204
+    interval: 900
+    tolerance: 50
+    lazy: true
+    filter: "埃及|EG|(?i)Egypt|Cairo"
+    hidden: *hide
+
+  - name: 🇳🇬尼日利亚
+    type: url-test
+    use: *use
+    url: http://www.gstatic.com/generate_204
+    interval: 900
+    tolerance: 50
+    lazy: true
+    filter: "尼日利亚|NG|(?i)Nigeria|Abuja"
+    hidden: *hide
+
+  - name: 🇰🇪肯尼亚
+    type: url-test
+    use: *use
+    url: http://www.gstatic.com/generate_204
+    interval: 900
+    tolerance: 50
+    lazy: true
+    filter: "肯尼亚|肯|KE|(?i)Kenya|Nairobi"
+    hidden: *hide
+
+  #  大洋洲 
+  - name: 🇦🇺澳大利亚
+    type: url-test
+    use: *use
+    url: http://www.gstatic.com/generate_204
+    interval: 900
+    tolerance: 50
+    lazy: true
+    filter: "澳大利亚|AU|(?i)Australia|Canberra"
+    hidden: *hide
+
+  - name: 🇳🇿新西兰
+    type: url-test
+    use: *use
+    url: http://www.gstatic.com/generate_204
+    interval: 900
+    tolerance: 50
+    lazy: true
+    filter: "新西兰|NZ|(?i)New Zealand|Wellington"
+    hidden: *hide
+
+  - name: 🇫🇯斐济
+    type: url-test
+    use: *use
+    url: http://www.gstatic.com/generate_204
+    interval: 900
+    tolerance: 50
+    lazy: true
+    filter: "斐济|斐|FJ|(?i)Fiji|Suva"
+    hidden: *hide
+
+
+#========= 规则集 ========#
+rule-providers:
+  # 广告拦截
+  AntiAD:
+    <<: *domain
+    url: "https://raw.githubusercontent.com/privacy-protection-tools/anti-AD/master/anti-ad-clash.yaml"
+    path: ./ruleset/anti-ad.yaml
+    
+  AdRules:
+    <<: *domain
+    url: "https://raw.githubusercontent.com/Cats-Team/AdRules/main/adrules_domainset.txt"
+    path: ./ruleset/AdRules.yaml
+
+  AD217:
+    <<: *domain
+    url: "https://raw.githubusercontent.com/217heidai/adblockfilters/main/rules/adblockmihomo.yaml"
+    path: ./ruleset/AD217.yaml
+
+  Loyalsoldier:
+    <<: *domain
+    url: "https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/reject.txt"
+    path: ./ruleset/Loyalsoldier.yaml
+
+  REIJI007:
+    <<: *domain
+    url: "https://raw.githubusercontent.com/REIJI007/AdBlock_Rule_For_Clash/main/adblock_reject.yaml"
+    path: ./ruleset/REIJI007.yaml
+
+  # 国内直连  
+  ChinaMax:
+    <<: *classical
+    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/ChinaMax/ChinaMax_Classical.yaml"
+    path: ./ruleset/ChinaMax.yaml
+    
+  ChinaIP:
+    <<: *ipcidr
+    url: "https://cdn.jsdelivr.net/gh/soffchen/GeoIP2-CN@release/clash-rule-provider.yml"
+    path: ./ruleset/ChinaIP.yaml
+    
+  # 国内社媒
+  BiliBili:
+    <<: *classical
+    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/BiliBili/BiliBili.yaml"
+    path: ./ruleset/BiliBili.yaml
+    
+  DouYin:
+    <<: *classical
+    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/DouYin/DouYin.yaml"
+    path: ./ruleset/DouYin.yaml
+    
+  # 海外平台
+  Apple:
+    <<: *classical
+    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Apple/Apple_Classical.yaml"
+    path: ./ruleset/Apple.yaml
+    
+  Microsoft:
+    <<: *classical
+    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Microsoft/Microsoft.yaml"
+    path: ./ruleset/Microsoft.yaml
+    
+  Google:
+    <<: *classical
+    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Google/Google.yaml"
+    path: ./ruleset/Google.yaml
+    
+  Ai:
+    <<: *classical
+    url: "https://gist.githubusercontent.com/ddgksf2013/cb4121e8b5c5d865cc949cb8120320c4/raw/Ai.yaml"
+    path: ./ruleset/Ai.yaml
+    
+  GitHub:
+    <<: *classical
+    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/GitHub/GitHub.yaml"
+    path: ./ruleset/GitHub.yaml
+    
+  PayPal:
+    <<: *classical
+    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/PayPal/PayPal.yaml"
+    path: ./ruleset/PayPal.yaml
+    
+  # 海外社交
+  Facebook:
+    <<: *classical
+    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Facebook/Facebook.yaml"
+    path: ./ruleset/Facebook.yaml
+    
+  Instagram:
+    <<: *classical
+    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Instagram/Instagram.yaml"
+    path: ./ruleset/Instagram.yaml
+
+  Line:
+    <<: *classical
+    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Line/Line.yaml"
+    path: ./ruleset/Line.yaml
+    
+  Whatsapp:
+    <<: *classical
+    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Whatsapp/Whatsapp.yaml"
+    path: ./ruleset/Whatsapp.yaml
+    
+  Threads:
+    <<: *classical
+    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Threads/Threads.yaml"
+    path: ./ruleset/Threads.yaml
+
+  Twitter:
+    <<: *classical
+    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Twitter/Twitter.yaml"
+    path: ./ruleset/Twitter.yaml
+
+  Telegram:
+    <<: *classical
+    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Telegram/Telegram.yaml"
+    path: ./ruleset/Telegram.yaml
+
+  # 海外媒体
+  Bahamut:
+    <<: *classical
+    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Bahamut/Bahamut.yaml"
+    path: ./ruleset/Bahamut.yaml
+    
+  Disney:
+    <<: *classical
+    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Disney/Disney.yaml"
+    path: ./ruleset/Disney.yaml
+
+  HBO:
+    <<: *classical
+    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/HBO/HBO.yaml"
+    path: ./ruleset/HBO.yaml
+
+  Netflix:
+    <<: *classical
+    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Netflix/Netflix_Classical.yaml"
+    path: ./ruleset/Netflix.yaml
+
+  YouTube:
+    <<: *classical
+    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/YouTube/YouTube.yaml"
+    path: ./ruleset/YouTube.yaml
+    
+  Spotify:
+    <<: *classical
+    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Spotify/Spotify.yaml"
+    path: ./ruleset/Spotify.yaml
+    
+  TikTok:
+    <<: *classical
+    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/TikTok/TikTok.yaml"
+    path: ./ruleset/TikTok.yaml
+
+  # 游戏平台
+  Game:
+    <<: *classical
+    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Game/Game.yaml"
+    path: ./ruleset/Game.yaml
+
+  Epic:
+    <<: *classical
+    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Epic/Epic.yaml"
+    path: ./ruleset/Epic.yaml
+
+  Steam:
+    <<: *classical
+    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Steam/Steam.yaml"
+    path: ./ruleset/Steam.yaml
+
+  SteamCN:
+    <<: *classical
+    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/SteamCN/SteamCN.yaml"
+    path: ./ruleset/SteamCN.yaml
+    
+  Proxy:
+    <<: *classical
+    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Proxy/Proxy_Classical.yaml"
+    path: ./ruleset/Proxy.yaml
+
+
+#========= 分流规则 ========#
+rules:
+  # 广告拦截
+  - RULE-SET,AntiAD,REJECT
+  - RULE-SET,AdRules,REJECT
+  - RULE-SET,AD217,REJECT
+  - RULE-SET,Loyalsoldier,REJECT
+  - RULE-SET,REIJI007,REJECT
+
+  # 国内直连
+  - RULE-SET,ChinaMax,DIRECT
+  - RULE-SET,ChinaIP,DIRECT
+  
+  # 国内社媒
+  - RULE-SET,BiliBili,哔哩哔哩
+  - RULE-SET,DouYin,PROXY
+  
+  # 海外平台
+  - RULE-SET,Apple,Apple
+  - RULE-SET,Microsoft,Microsoft
+  - RULE-SET,Google,🇺🇸美国
+  - RULE-SET,Ai,🇺🇸美国
+  - RULE-SET,GitHub,🇺🇸美国
+  - RULE-SET,PayPal,PayPal
+  
+  # 海外社交
+  - RULE-SET,Facebook,国际社交
+  - RULE-SET,Instagram,国际社交
+  - RULE-SET,Line,国际社交
+  - RULE-SET,Whatsapp,国际社交
+  - RULE-SET,Threads,国际社交
+  - RULE-SET,Twitter,国际社交
+  - RULE-SET,Telegram,国际社交
+
+  # 海外媒体
+  - RULE-SET,Bahamut,🇨🇳台湾
+  - RULE-SET,Disney,国际媒体
+  - RULE-SET,HBO,国际媒体
+  - RULE-SET,Netflix,国际媒体
+  - RULE-SET,YouTube,国际媒体
+  - RULE-SET,Spotify,🇺🇸美国
+  - RULE-SET,TikTok,国际媒体
+
+  # 游戏平台
+  - RULE-SET,Game,游戏平台
+  - RULE-SET,Epic,游戏平台
+  - RULE-SET,Steam,游戏平台
+  - RULE-SET,SteamCN,DIRECT
+  - RULE-SET,Proxy,全球畅连
+  - GEOSITE,CN,DIRECT
+  - GEOIP,CN,DIRECT
+  - MATCH,全球畅连

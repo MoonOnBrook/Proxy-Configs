@@ -42,7 +42,7 @@ Apple = select,DIRECT,香港,台湾,新加坡,日本,美国,img-url = https://ra
 Microsoft = select,DIRECT,香港,台湾,新加坡,日本,美国,img-url = https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Microsoft.png
 PayPal = select,DIRECT,香港,台湾,新加坡,日本,美国,img-url = https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/PayPal.png
 哔哩哔哩 = select,DIRECT,香港,台湾,新加坡,日本,美国,img-url = https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/bilibili.png
-抖音 = select,DIRECT,香港,台湾,新加坡,日本,美国,img-url = https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/TikTok.png
+抖音 = select,DIRECT,香港,台湾,新加坡,日本,美国,英国,德国,法国,荷兰,瑞士,意大利,西班牙,加拿大,澳大利亚,土耳其,以色列,印度,韩国,泰国,越南,马来西亚,巴西,阿根廷,智利,南非,img-url = https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/TikTok.png
 
 # >>>>> 地区策略组 <<<<< #
 自动选择 = url-test,♻️自动选择AUTO,interval = 900,img-url = https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Auto.png

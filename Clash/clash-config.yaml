@@ -1,4 +1,4 @@
-========= 基础设置 ========#
+#========= 基础设置 ========#
 port: 7890
 socks-port: 7891
 redir-port: 7892
@@ -144,10 +144,6 @@ proxy-providers:
 #========= 策略组 ========#
 proxy-groups:
   # 代理分组
-  - name: PROXY
-    type: select
-    use: *use
-    
   - name: 全球畅连
     type: select
     proxies: [♻️自动选择, 🇭🇰香港, 🇨🇳台湾, 🇸🇬新加坡, 🇯🇵日本, 🇺🇸美国]
@@ -180,8 +176,11 @@ proxy-groups:
     type: select
     proxies: [DIRECT, 🇭🇰香港, 🇨🇳台湾, 🇸🇬新加坡, 🇯🇵日本, 🇺🇸美国]
     
-     
-  # --------- 地区分组 --------- #
+  - name: 抖音
+    type: select
+    proxies: [DIRECT, 🇭🇰香港, 🇨🇳台湾, 🇸🇬新加坡, 🇯🇵日本, 🇺🇸美国, 🇬🇧英国, 🇩🇪德国, 🇫🇷法国, 🇳🇱荷兰, 🇨🇭瑞士, 🇮🇹意大利, 🇪🇸西班牙, 🇨🇦加拿大, 🇦🇺澳大利亚, 🇹🇷土耳其, 🇮🇱以色列, 🇮🇳印度, 🇰🇷韩国, 🇹🇭泰国, 🇻🇳越南, 🇲🇾马来西亚, 🇧🇷巴西, 🇦🇷阿根廷, 🇨🇱智利, 🇿🇦南非]
+    
+#========== 地区分组 ==========#
   - name: ♻️自动选择
     type: url-test
     use: *use
@@ -873,7 +872,7 @@ rules:
   
   # 国内社媒
   - RULE-SET,BiliBili,哔哩哔哩
-  - RULE-SET,DouYin,PROXY
+  - RULE-SET,DouYin,抖音
   
   # 海外平台
   - RULE-SET,Apple,Apple
@@ -907,6 +906,5 @@ rules:
   - RULE-SET,Steam,游戏平台
   - RULE-SET,SteamCN,DIRECT
   - RULE-SET,Proxy,全球畅连
-  - GEOSITE,CN,DIRECT
   - GEOIP,CN,DIRECT
   - MATCH,全球畅连

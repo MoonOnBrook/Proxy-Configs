@@ -9,7 +9,7 @@ mode: rule
 log-level: info
 ipv6: false
 external-controller: 127.0.0.1:9090
-secret: "you password"   # API密码，请修改为你的自定义密码
+secret: "you_password"   # API密码，请修改为你的自定义密码
 unified-delay: true
 tcp-concurrent: true
 disable-icmp-forwarding: true

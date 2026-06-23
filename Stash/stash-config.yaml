@@ -435,11 +435,6 @@ rule-providers:
     format: yaml
     interval: 86400
     url: https://raw.githubusercontent.com/MoonOnBrook/APNs/refs/heads/main/Stash/APNs.yaml
-  AdRules:
-    behavior: domain
-    format: text
-    interval: 86400
-    url: https://raw.githubusercontent.com/Cats-Team/AdRules/main/adrules_domainset.txt
   AD217:
     behavior: domain
     format: mrs
@@ -602,7 +597,6 @@ rule-providers:
 #========= 分流规则 ========#
 rules:
   - RULE-SET,APNs,🇨🇳台湾
-  - RULE-SET,AdRules,REJECT
   - RULE-SET,AD217,REJECT
   - RULE-SET,BiliBili,哔哩哔哩
   - RULE-SET,DouYin,抖音

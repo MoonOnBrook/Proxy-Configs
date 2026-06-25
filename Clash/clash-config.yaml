@@ -176,10 +176,7 @@ proxy-groups:
     type: select
     proxies: [DIRECT, 🇭🇰香港, 🇨🇳台湾, 🇸🇬新加坡, 🇯🇵日本, 🇺🇸美国]
     
-  - name: 抖音
-    type: select
-    proxies: [DIRECT, 🇭🇰香港, 🇨🇳台湾, 🇸🇬新加坡, 🇯🇵日本, 🇺🇸美国, 🇬🇧英国, 🇩🇪德国, 🇫🇷法国, 🇳🇱荷兰, 🇨🇭瑞士, 🇮🇹意大利, 🇪🇸西班牙, 🇨🇦加拿大, 🇦🇺澳大利亚, 🇹🇷土耳其, 🇮🇱以色列, 🇮🇳印度, 🇰🇷韩国, 🇹🇭泰国, 🇻🇳越南, 🇲🇾马来西亚, 🇧🇷巴西, 🇦🇷阿根廷, 🇨🇱智利, 🇿🇦南非]
-    
+
 #========== 地区分组 ==========#
   - name: ♻️自动选择
     type: url-test
@@ -722,11 +719,6 @@ rule-providers:
     url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/BiliBili/BiliBili.yaml"
     path: ./ruleset/BiliBili.yaml
     
-  DouYin:
-    <<: *classical
-    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/DouYin/DouYin.yaml"
-    path: ./ruleset/DouYin.yaml
-    
   # 海外平台
   Apple:
     <<: *classical
@@ -872,7 +864,6 @@ rules:
   
   # 国内社媒
   - RULE-SET,BiliBili,哔哩哔哩
-  - RULE-SET,DouYin,抖音
   
   # 海外平台
   - RULE-SET,Apple,Apple

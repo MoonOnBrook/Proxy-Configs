@@ -66,10 +66,6 @@ proxy-groups:
     type: select
     proxies: [DIRECT, 🇭🇰香港, 🇨🇳台湾, 🇸🇬新加坡, 🇯🇵日本, 🇺🇸美国]
     icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/bilibili.png
-  - name: 抖音
-    type: select
-    proxies: [DIRECT, 🇭🇰香港, 🇨🇳台湾, 🇸🇬新加坡, 🇯🇵日本, 🇺🇸美国, 🇬🇧英国, 🇩🇪德国, 🇫🇷法国, 🇳🇱荷兰, 🇨🇭瑞士, 🇮🇹意大利, 🇪🇸西班牙, 🇨🇦加拿大, 🇦🇺澳大利亚, 🇹🇷土耳其, 🇮🇱以色列, 🇮🇳印度, 🇰🇷韩国, 🇹🇭泰国, 🇻🇳越南, 🇲🇾马来西亚, 🇧🇷巴西, 🇦🇷阿根廷, 🇨🇱智利, 🇿🇦南非]
-    icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/TikTok.png
 #========== 地区分组 ==========#
   - name: ♻️自动选择
     type: url-test
@@ -445,11 +441,6 @@ rule-providers:
     format: yaml
     interval: 86400
     url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/BiliBili/BiliBili.yaml
-  DouYin:
-    behavior: classical
-    format: yaml
-    interval: 86400
-    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/DouYin/DouYin.yaml
   WeChat:
     behavior: classical
     format: yaml
@@ -599,7 +590,6 @@ rules:
   - RULE-SET,APNs,🇨🇳台湾
   - RULE-SET,AD217,REJECT
   - RULE-SET,BiliBili,哔哩哔哩
-  - RULE-SET,DouYin,抖音
   - RULE-SET,WeChat,DIRECT
   - RULE-SET,ChinaMax,DIRECT
   - RULE-SET,ChinaIP,DIRECT

@@ -42,7 +42,6 @@ Apple = select,DIRECT,香港,台湾,新加坡,日本,美国,img-url = https://ra
 Microsoft = select,DIRECT,香港,台湾,新加坡,日本,美国,img-url = https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Microsoft.png
 PayPal = select,DIRECT,香港,台湾,新加坡,日本,美国,img-url = https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/PayPal.png
 哔哩哔哩 = select,DIRECT,香港,台湾,新加坡,日本,美国,img-url = https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/bilibili.png
-抖音 = select,DIRECT,香港,台湾,新加坡,日本,美国,英国,德国,法国,荷兰,瑞士,意大利,西班牙,加拿大,澳大利亚,土耳其,以色列,印度,韩国,泰国,越南,马来西亚,巴西,阿根廷,智利,南非,img-url = https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/TikTok.png
 
 # >>>>> 地区策略组 <<<<< #
 自动选择 = url-test,♻️自动选择AUTO,interval = 900,img-url = https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Auto.png
@@ -206,7 +205,6 @@ https://raw.githubusercontent.com/MoonOnBrook/APNs/refs/heads/main/Loon/APNs.lis
 https://raw.githubusercontent.com/Cats-Team/AdRules/main/adrules.list, policy=REJECT, tag=AdRules, enabled=true
 https://raw.githubusercontent.com/217heidai/adblockfilters/main/rules/adblockloon.list, policy=REJECT, tag=AD217, enabled=true
 https://rule.kelee.one/Loon/BiliBili.lsr, policy=哔哩哔哩, tag=BiliBili, enabled=true
-https://rule.kelee.one/Loon/DouYin.lsr, policy=抖音, tag=DouYin, enabled=true
 https://raw.githubusercontent.com/ddgksf2013/Filter/master/NeteaseMusic.list, policy=DIRECT, tag=NeteaseMusic, enabled=true
 https://rule.kelee.one/Loon/WeChat.lsr, policy=DIRECT, tag=WeChat, enabled=true
 https://raw.githubusercontent.com/eulac-dev/Proxy/refs/heads/main/Loon/Rules/PanVod.lsr, policy=DIRECT, tag=PanVod, enabled=true
